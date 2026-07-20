@@ -30,8 +30,8 @@ def pv_growing_perpetuity(cf1, rate, growth):
 
 
 #MAIN CALCULATION
-def calculate(value_type, periods, rate, cf, growth_phases, phases):
-    total = 0.0
+def calculate(value_type, periods, rate, cf, growth_phases, phases, starting_amount):
+    total = starting_amount
     total_periods = periods
     log = []
 
@@ -41,7 +41,7 @@ def calculate(value_type, periods, rate, cf, growth_phases, phases):
             total += discrete_result
         else:
             discrete_result = fv_annuity(cf, rate, periods)
-            total = discrete_result
+            total = starting_amount * (1 + rate) ** periods + discrete_result
         log.append(f"{value_type} Discrete Forecast: ${discrete_result:,.2f}")
 
     last_cf = cf
