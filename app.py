@@ -1,6 +1,7 @@
 import streamlit as st
 from calculator import calculate
 import pandas as pd
+import altair as alt
 
 #layout of the page; two columns, left for inputs, right for results
 st.set_page_config(layout="wide")
@@ -47,6 +48,38 @@ def create_growth_timeline(periods, rate, cf, phases, perpetuity_years=20):
             })
 
     return pd.DataFrame(timeline)
+
+#donut chart showing cash flow contributions and interest
+def create_breakdown_chart(timeline):
+    total_cash_flows = timeline["Annual Cash Flow"].sum()
+    final_value = timeline["Accumulated Value"].iloc[-1]
+    interest = final_value - total_cash_flows
+
+    breakdown = pd.DataFrame({
+        "Category": ["Cash Flow Deposits", "Interest"],
+        "Amount": [total_cash_flows, max(interest, 0)]
+    })
+
+    breakdown["Percent"] = breakdown["Amount"] / breakdown["Amount"].sum()
+
+    base = alt.Chart(breakdown).encode(
+        theta=alt.Theta("Amount:Q", stack=True),
+        color=alt.Color("Category:N", legend=alt.Legend(title=None)),
+        tooltip=[
+            alt.Tooltip("Category:N", title="Category"),
+            alt.Tooltip("Amount:Q", title="Amount", format="$,.2f"),
+            alt.Tooltip("Percent:Q", title="Percent", format=".1%")
+        ]
+    )
+
+    donut = base.mark_arc(innerRadius=55, outerRadius=95)
+
+    labels = base.mark_text(radius=75, size=14, fontWeight="bold").encode(
+        text=alt.Text("Percent:Q", format=".0%"),
+        color=alt.value("white")
+    )
+
+    return (donut + labels).properties(width=300, height=230)
 
 
 #MAIN PROGRAM
@@ -115,6 +148,9 @@ with right_column:
                 timeline = create_growth_timeline(int(periods), rate, cf, phases)
                 st.subheader("Money Growth Over Time")
                 st.line_chart(timeline, x="Year", y=["Annual Cash Flow", "Accumulated Value"], x_label="Year", y_label="Value ($)")
+                st.subheader("Value Breakdown")
+                breakdown_chart = create_breakdown_chart(timeline)
+                st.altair_chart(breakdown_chart, width="stretch")
 
             except ValueError as e:
                 st.error(str(e))
