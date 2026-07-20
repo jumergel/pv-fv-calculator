@@ -49,24 +49,29 @@ def create_growth_timeline(periods, rate, cf, phases, perpetuity_years=20):
 
     return pd.DataFrame(timeline)
 
-#donut chart showing starting amount, deposits, and interest
-def create_breakdown_chart(timeline):
-    cash_flows = timeline.loc[timeline["Annual Cash Flow"] != 0, "Annual Cash Flow"]
+#donut chart showing the value breakdown
+def create_breakdown_chart(timeline, starting_amount, total, value_type):
+    if value_type == "FV":
+        periodic_deposits = timeline["Annual Cash Flow"].sum()
+        interest = total - starting_amount - periodic_deposits
 
-    if len(cash_flows) == 0:
-        starting_amount = 0.0
-        periodic_deposits = 0.0
+        breakdown = pd.DataFrame({
+            "Category": ["Starting Amount", "Periodic Deposits", "Interest"],
+            "Amount": [starting_amount, periodic_deposits, max(interest, 0)]
+        })
+
     else:
-        starting_amount = cash_flows.iloc[0]
-        periodic_deposits = cash_flows.iloc[1:].sum()
+        future_cash_flow_pv = total - starting_amount
 
-    final_value = timeline["Accumulated Value"].iloc[-1]
-    interest = final_value - starting_amount - periodic_deposits
+        breakdown = pd.DataFrame({
+            "Category": ["Starting Amount", "PV of Future Cash Flows"],
+            "Amount": [starting_amount, max(future_cash_flow_pv, 0)]
+        })
 
-    breakdown = pd.DataFrame({
-        "Category": ["Starting Amount", "Periodic Deposits", "Interest"],
-        "Amount": [starting_amount, periodic_deposits, max(interest, 0)]
-    })
+    breakdown = breakdown[breakdown["Amount"] > 0]
+
+    if breakdown["Amount"].sum() == 0:
+        return None
 
     breakdown["Percent"] = breakdown["Amount"] / breakdown["Amount"].sum()
 
@@ -159,7 +164,7 @@ with right_column:
                 st.subheader("Money Growth Over Time")
                 st.line_chart(timeline, x="Year", y=["Annual Cash Flow", "Accumulated Value"], x_label="Year", y_label="Value ($)")
                 st.subheader("Value Breakdown")
-                breakdown_chart = create_breakdown_chart(timeline)
+                breakdown_chart = create_breakdown_chart(timeline, starting_amount, total, value_type)
                 st.altair_chart(breakdown_chart, width="stretch")
 
             except ValueError as e:
