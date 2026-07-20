@@ -69,13 +69,25 @@ for i in range(int(growth_phases)): #creates a phase input box for number of gro
     phases.append({"growth": growth, "type": phase_type, "length": length})
 
 if st.button("Calculate"):
-    try:
-        total, log = calculate(value_type, int(periods), rate, cf, int(growth_phases), phases)
-        for line in log:
-            st.write(line)
-        timeline = create_growth_timeline(int(periods), rate, cf, phases)
-        st.subheader("Money Growth Over Time")
-        st.line_chart(timeline,x="Year", y=["Annual Cash Flow", "Accumulated Value"],x_label="Year",y_label="Value ($)")
+    basic_inputs_missing = (
+        periods is None
+        or rate is None
+        or cf is None
+        or growth_phases is None
+    )
 
-    except ValueError as e:
-        st.error(str(e))
+    phase_inputs_missing = any(phase["growth"] is None or (phase["type"] == "annuity"and phase["length"] is None )for phase in phases)
+
+    if basic_inputs_missing or phase_inputs_missing:
+        st.error("Please fill in all input boxes.")
+    else:
+        try:
+            total, log = calculate(value_type, int(periods), rate, cf, int(growth_phases), phases)
+            for line in log:
+                st.write(line)
+            timeline = create_growth_timeline(int(periods), rate, cf, phases)
+            st.subheader("Money Growth Over Time")
+            st.line_chart(timeline,x="Year", y=["Annual Cash Flow", "Accumulated Value"],x_label="Year",y_label="Value ($)")
+
+        except ValueError as e:
+            st.error(str(e))
