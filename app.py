@@ -73,9 +73,9 @@ if st.button("Calculate"):
         total, log = calculate(value_type, int(periods), rate, cf, int(growth_phases), phases)
         for line in log:
             st.write(line)
-            timeline = create_growth_timeline(int(periods), rate, cf, phases)
-            st.subheader("Money Growth Over Time")
-            st.line_chart(timeline,x="Year", y=["Annual Cash Flow", "Accumulated Value"],x_label="Year",y_label="Value ($)")
+        timeline = create_growth_timeline(int(periods), rate, cf, phases)
+        st.subheader("Money Growth Over Time")
+        st.line_chart(timeline,x="Year", y=["Annual Cash Flow", "Accumulated Value"],x_label="Year",y_label="Value ($)")
 
     except ValueError as e:
         st.error(str(e))
