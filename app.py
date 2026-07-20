@@ -5,17 +5,7 @@ import pandas as pd
 #layout of the page; two columns, left for inputs, right for results
 st.set_page_config(layout="wide")
 #center and give padding to the content
-st.markdown(""" 
-    <style>
-        .block-container {
-            max-width: 1200px;
-            margin: auto;
-            padding-top: 2rem;
-            padding-left: 2rem;
-            padding-right: 2rem;
-        }
-    </style>
-""", unsafe_allow_html=True)
+st.html("styles.css")
 
 #graph
 def create_growth_timeline(periods, rate, cf, phases, perpetuity_years=20):

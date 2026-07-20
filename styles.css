@@ -1,0 +1,53 @@
+/* make the overall interface slightly smaller */
+html {
+    font-size: 14px;
+}
+
+/* center the page and add more space around the edges */
+.block-container {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+}
+
+/* center and slightly reduce the main title */
+h1 {
+    text-align: center;
+    font-size: 2.4rem !important;
+    margin-bottom: 2rem !important;
+}
+
+/* make section headings slightly smaller */
+h2 {
+    font-size: 1.5rem !important;
+}
+
+h3 {
+    font-size: 1.25rem !important;
+}
+
+/* input labels slightly smaller */
+div[data-testid="stWidgetLabel"] p {
+    font-size: 0.9rem;
+}
+
+/*  text inside input boxes slightly smaller */
+input {
+    font-size: 0.9rem !important;
+}
+
+/*  select box text slightly smaller */
+div[data-baseweb="select"] {
+    font-size: 0.9rem;
+}
+
+/* use less padding on smaller screens */
+@media (max-width: 800px) {
+    .block-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
