@@ -17,7 +17,7 @@ html {
 h1 {
     text-align: center;
     font-size: 2.4rem !important;
-    margin-bottom: 2rem !important;
+    margin-bottom: 0rem !important;
 }
 
 /* make section headings slightly smaller */
@@ -31,17 +31,17 @@ h3 {
 
 /* input labels slightly smaller */
 div[data-testid="stWidgetLabel"] p {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
 }
 
 /*  text inside input boxes slightly smaller */
 input {
-    font-size: 0.9rem !important;
+    font-size: 0.95rem !important;
 }
 
 /*  select box text slightly smaller */
 div[data-baseweb="select"] {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
 }
 
 /* use less padding on smaller screens */
