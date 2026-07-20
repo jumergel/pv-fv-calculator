@@ -103,7 +103,7 @@ with left_column:
 
     #INPUTS
     value_type = st.selectbox("PV or FV?", ["PV", "FV"])
-    starting_amount = st.number_input("Base cash flow", value=0)
+    starting_amount = st.number_input("Starting amount", value=0)
     periods = st.number_input("Discrete no-growth periods", min_value=0, step=1, value=0)
     rate = st.number_input("Discount rate (e.g. 0.07 for 7%)", value=0.07, format="%g")
     cf = st.number_input("Base cash flow", value=100)
