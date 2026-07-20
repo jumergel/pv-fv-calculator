@@ -49,15 +49,15 @@ def create_growth_timeline(periods, rate, cf, phases, perpetuity_years=20):
 
     return pd.DataFrame(timeline)
 
-#donut chart showing cash flow contributions and interest
-def create_breakdown_chart(timeline):
-    total_cash_flows = timeline["Annual Cash Flow"].sum()
+#donut chart showing starting amount, deposits, and interest
+def create_breakdown_chart(timeline, starting_amount):
+    periodic_deposits = timeline["Annual Cash Flow"].sum()
     final_value = timeline["Accumulated Value"].iloc[-1]
-    interest = final_value - total_cash_flows
+    interest = final_value - starting_amount - periodic_deposits
 
     breakdown = pd.DataFrame({
-        "Category": ["Cash Flow Deposits", "Interest"],
-        "Amount": [total_cash_flows, max(interest, 0)]
+        "Category": ["Starting Amount", "Periodic Deposits", "Interest"],
+        "Amount": [starting_amount, periodic_deposits, max(interest, 0)]
     })
 
     breakdown["Percent"] = breakdown["Amount"] / breakdown["Amount"].sum()
