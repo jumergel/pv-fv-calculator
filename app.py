@@ -47,14 +47,14 @@ st.title("PV / FV Calculator")
 
 value_type = st.selectbox("PV or FV?", ["PV", "FV"])
 periods = st.number_input("Discrete no-growth periods", min_value=0, step=1)
-rate = st.number_input("Discount rate (e.g. 0.07 for 7%)", value=0.07, format="%.4f")
+rate = st.number_input("Discount rate (e.g. 0.07 for 7%)", value=0.07, format="%g")
 cf = st.number_input("Base cash flow", value=0.0)
 growth_phases = st.number_input("Number of growth phases (0 for none)", min_value=0, step=1)
 
 phases = []
 for i in range(int(growth_phases)): #creates a phase input box for number of growth_phases
     st.subheader(f"Phase {i + 1}")
-    growth = st.number_input(f"Phase {i + 1} growth rate", value=0.0, format="%.4f", key=f"growth_{i}")
+    growth = st.number_input(f"Phase {i + 1} growth rate", value=0.0, format="%g", key=f"growth_{i}")
 
     if value_type == "PV" and i == growth_phases - 1:
         phase_type = st.selectbox(f"Phase {i + 1} type", ["annuity", "perpetuity"], key=f"type_{i}")
