@@ -165,7 +165,10 @@ with right_column:
                 st.line_chart(timeline, x="Year", y=["Annual Cash Flow", "Accumulated Value"], x_label="Year", y_label="Value ($)")
                 st.subheader("Value Breakdown")
                 breakdown_chart = create_breakdown_chart(timeline, starting_amount, total, value_type)
-                st.altair_chart(breakdown_chart, width="stretch")
+                if breakdown_chart is not None:
+                    st.altair_chart(breakdown_chart, width="stretch")
+                else:
+                    st.info("Enter cash flows or a starting amount to display the value breakdown.")
 
             except ValueError as e:
                 st.error(str(e))
